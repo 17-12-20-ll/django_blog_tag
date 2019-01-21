@@ -1,0 +1,108 @@
+{% extends 'a_base.html' %}
+{% block title %}
+<title>{{art.title}}详情</title>
+{% endblock %}
+{% block content %}
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-xl-8 col-lg-12">
+            <div class="row">
+                <div class="col-xl-8 col-lg-12 mx-auto">
+                    <h1 class="mb-5">{{art.title}}</h1>
+                    <h3 class="mb-3">文章出自:<a href="{% url 'show:a_contact' %}?id={{art.user_id}}">{{art.user.name}}</a></h3>
+                    <h3 class="mb-3">文章栏目:{{art.col.name}}</h3>
+                    <p>{{art.content|safe}}</p>
+                    <h5 class="mb-3">文章标签:{% for l in art.lab.all %}{% if forloop.last%}标签{{forloop.counter}}:{{l.name}}{% else %}标签{{forloop.counter}}:{{l.name}}&nbsp;&nbsp;|&nbsp;&nbsp;{% endif %}{% endfor %}</h5>
+                    <div>
+                        <!--判断是否有上一篇-->
+                        {% if has_prev %}
+                        <a style="float:left" href="{% url 'show:a_single' %}?id={{art_prev.id}}" rel="prev"
+                           title="{{ art_prev.title }}">
+                            <<&nbsp;&nbsp;{{ art_prev.title }}
+                        </a>
+                        {% else %}
+                        <a href="javascript:;" style="float:left">
+                            没有文章啦!!!
+                        </a>
+                        {% endif %}
+
+                        <!--判断是否有下一篇-->
+                        {% if has_next %}
+                        <a style="float:right" href="{% url 'show:a_single' %}?id={{art_next.id}}" rel="next"
+                           title="{{ art_next.title }}">
+                            {{ art_next.title }}&nbsp;&nbsp;>>
+                        </a>
+                        {% else %}
+                        <a href="javascript:;" style="float:right">
+                            没有文章啦!!!
+                        </a>
+                        {% endif %}
+                    </div>
+                    <br>
+                    <h3>评论列表:</h3>
+                    {% for comment in comment_list %}
+                    <p><a href="#{{forloop.counter}}">#{{forloop.counter}}楼</a><a name="{{forloop.counter}}"></a>
+                        &nbsp;&nbsp;{{comment.add_time|date:'Y-m-d H:i:s'}}&nbsp;&nbsp;
+                        <a href="{% url 'show:a_contact' %}?id={{comment.user.id}}">{{comment.user.name}}</a>&nbsp;&nbsp;
+                        {% if comment.user_id == art.user_id %}<font color="red">[楼主]</font>{% endif %}
+                    </p>
+                    <h5>{{comment.content}}</h5>
+                    {% endfor %}
+                    <form action="" method="post">
+                        {% csrf_token %}
+                        <h3>我要评论:</h3>
+                        <textarea name="comment" cols="50" rows="5"></textarea>
+                        <input type="submit" name="sub" value="提交">
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <!-- END row -->
+
+    <section class="probootstrap-section">
+        <div class="container-fluid">
+            <div class="row mb-5 justify-content-center">
+                <div class="col-md-8">
+                    <div class="row">
+                        <div class="col-md-8 mx-auto">
+                            <h2 class="h1 mb-5 mt-0">最新文章</h2>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="row mb-5">
+                <div class="col-md-12">
+                    <div class="owl-carousel probootstrap-owl">
+                        {% for art in new_art_list %}
+                        <div class="item" onclick="jump({{art.id}});">
+                            <img src="/media/{{art.title_img}}" width="370px" height="250px"
+                                 alt="图片加载中...">
+                            <div class="p-4 border border-top-0">
+                                <h4>{{art.title}}</h4>
+                                <p>{{art.describe}}</p>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <script>
+                function jump(id){
+                    location.href = '/show/a_single/?id='+id;
+                }
+            </script>
+
+
+        </div>
+    </section>
+    <!-- END section -->
+
+</div>
+
+
+{% endblock %}

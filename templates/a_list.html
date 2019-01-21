@@ -1,0 +1,22 @@
+{% extends 'a_base.html' %}
+{% block title %}
+{% if flag %}
+<title>搜索文章列表</title>
+{% else %}
+<title>标签详情列表</title>
+{% endif %}
+{% endblock %}
+{% block content %}
+<div class="card-columns">
+    {% for l in l_list %}
+    <div class="card">
+        <a href="{% url 'show:a_single' %}?id={{l.id}}" title="{{l.title}}">
+            <img class="card-img-top probootstrap-animate" src="/media/{{l.title_img}}" alt="Card image cap"
+                 data-animate-effect="fadeIn">
+        </a>
+    </div>
+    {% endfor %}
+</div>
+<div class="tlinks">Collect from <a href="http://www.cssmoban.com/">网页模板</a></div>
+
+{% endblock %}

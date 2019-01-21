@@ -1,0 +1,79 @@
+{% extends 'a_base.html' %}
+{% block title %}
+<title>关于作者</title>
+{% endblock %}
+{% block content %}
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-xl-8 col-lg-12" style="text-align:center;">
+            {% if user.id %}
+
+            <p class="mb-5"><img id="imgPhoto"
+                         style="border-radius: 100px;border: none;"
+                         width="200px" height="200px"
+                         src="/media/{{user.img}}"/></p>
+
+            <div class="row">
+                <div class="col-xl-8 col-lg-12 mx-auto">
+                    <h1 class="mb-3">关于</h1>
+                    <p>用户名:{{user.name}}</p>
+                    <p>详情:</p>
+                    {{user.desc|safe}}
+                </div>
+            </div>
+
+            <section class="probootstrap-section">
+        <div class="container-fluid">
+            <div class="row mb-5 justify-content-center">
+                <div class="col-md-8">
+                    <div class="row">
+                        <div class="col-md-8 mx-auto">
+                            <h2 class="h1 mb-5 mt-0">文章</h2>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="row mb-5">
+                <div class="col-md-12">
+                    <div class="owl-carousel probootstrap-owl">
+                        {% for art in user.user.all %}
+                        <div class="item">
+                            <a href="{% url 'show:a_single' %}?id={{art.id}}"><img src="/media/{{art.title_img}}"  width="370px" height="250px" title="{{art.title}}" /></a>
+                            <div class="p-4 border border-top-0">
+                                <h4>{{art.title}}</h4>
+                                <p>{{art.describe}}</p>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </section>
+
+            {% endif %}
+
+            {% if no_user %}
+
+            <p class="mb-5"><img id="imgPhoto"
+                         style="border-radius: 100px;border: none;"
+                         width="200px" height="200px"
+                         src="/static/a_images/avtar.png"/></p>
+            <div class="row">
+                <div class="col-xl-8 col-lg-12 mx-auto">
+                    <h1 class="mb-3">关于</h1>
+                    <p>{{no_user}}</p>
+                    <p><a href="{% url 'users:login' %}">登录后台</a></p>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+
+    </div>
+
+
+</div>
+{% endblock %}

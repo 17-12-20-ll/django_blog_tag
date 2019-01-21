@@ -1,0 +1,42 @@
+{% extends 'base_main.html' %}
+{% block title %}
+<title>用户信息设置</title>
+{% endblock %}
+
+{% block content %}
+{{block.super}}
+    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-lg-10 col-md-offset-2 main" id="main">
+      <h1 class="page-header">用户信息</h1>
+      <div class="row placeholders">
+        <div class="col-xs-6 col-sm-3 placeholder">
+          <h4>文章</h4>
+          <span class="text-muted"><font color="red">{{art_list|length}}</font> 条</span> </div>
+
+      </div>
+      <h1 class="page-header">更多信息修改</h1>
+      <div class="table-responsive">
+        <form action="" method="post" enctype="multipart/form-data">
+           {% csrf_token %}
+            <img src="/media/{{user.img}}" width="200px">
+          用户头像:<input type="file" name="user_img" />
+          用户简介:<textarea id="editor_id" name="desc" style="height: 400px;width: 925px;resize:none;">{{user.desc}}</textarea>
+            <input type="submit" value="确定修改" />
+        </form>
+      </div>
+    </div>
+{% endblock %}
+{% block js %}
+{{block.super}}
+<script src="/static/js/admin-scripts.js"></script>
+{% load static %}
+    <script type="text/javascript" src="{% static 'kindeditor/kindeditor-all.js' %}"></script>
+    <script type="text/javascript" src="{% static 'kindeditor/lang/zh-CN.js' %}"></script>
+    <script type="text/javascript">
+        KindEditor.ready(function(K) {
+                window.editor = K.create('#editor_id',{
+                    uploadJson:'/util/upload/kindeditor'
+                });
+        });
+    </script>
+{% endblock %}
+
